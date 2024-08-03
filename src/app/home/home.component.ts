@@ -210,29 +210,18 @@ export class HomeComponent implements OnInit {
   }
 
 
-  nativeSearch(){
+  fonctionSearch(){
     this.showSuggestions = !this.showSuggestions;
     console.log(this.searchQuery)
     if (this.searchQuery.length >= 3) {
       this.selected = this.searchQuery
-      let results = [];
-      for (let i = 0; i < this.data.length; i++) {
-        const item = this.data[i];
-        if (item.name.toLowerCase().includes(this.searchQuery) || item.description.toLowerCase().includes(this.searchQuery)) {
-          results.push(item);
-        } else {
-          for (let j = 0; j < item.ingredients.length; j++) {
-            const ing = item.ingredients[j];
-            if (ing.ingredient.toLowerCase().includes(this.searchQuery)) {
-              results.push(item);
-              break;
-            }
-          }
-        }
-      }
-      console.log("result : ", results)
-      this.filteredResults = results;
-      this.data = results
+      this.filteredResults = this.data.filter((item: any) =>
+        item.name.toLowerCase().includes(this.searchQuery) ||
+        item.description.toLowerCase().includes(this.searchQuery) ||
+        item.ingredients.some((ing: any) => ing.ingredient.toLowerCase().includes(this.searchQuery))
+      );
+      console.log("results : ", this.filteredResults)
+      this.data = this.filteredResults
       this.showSuggestions = true;
       if(!this.filteredResults){
         this.filteredResults = [];
